@@ -68,7 +68,7 @@ fun seconds(hours: Int, minutes: Int, seconds: Int): Int = 3600 * hours + 60 * m
  * Определить длину того же отрезка в метрах (в данном случае 18.98).
  * 1 сажень = 3 аршина = 48 вершков, 1 вершок = 4.445 см.
  */
-fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double = 4.445 / 100 * ( 48 * 3 * sagenes + 3 * arshins + vershoks)
+fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double =4.445 / 100 * (48 * sagenes + 16 * arshins + vershoks)
 
 
 /**
@@ -77,7 +77,7 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double = 4.445 / 
  * Пользователь задает угол в градусах, минутах и секундах (например, 36 градусов 14 минут 35 секунд).
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
-fun angleInRadian(deg: Int, min: Int, sec: Int): Double = 3.14 / 180 * (deg + min / 60 + sec / 3600)
+fun angleInRadian(deg: Int, min: Int, sec: Int): Double = ((sec / 60 + min) / 60 + deg) * PI / 180
 
 /**
  * Тривиальная
@@ -111,7 +111,7 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  * Сколько денег будет на счету через 3 года (с учётом сложных процентов)?
  * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
  */
-fun accountInThreeYears(initial: Int, percent: Int): Double = initial * (1 + percent / 100).pow(3)
+fun accountInThreeYears(initial: Int, percent: Int): Double = initial * (1 + percent / 100.0).pow(3)
 
 /**
  * Простая
