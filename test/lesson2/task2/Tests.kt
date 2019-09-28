@@ -45,6 +45,7 @@ class Tests {
         assertEquals(29, daysInMonth(2, 1996))
         assertEquals(28, daysInMonth(2, 1900))
         assertEquals(29, daysInMonth(2, 2000))
+        assertEquals(31, daysInMonth(1, 7226900))
     }
 
     @Test
@@ -55,6 +56,7 @@ class Tests {
         assertTrue(circleInside(2.0, 2.0, 2.0, 2.0, 2.0, 2.0))
         assertTrue(circleInside(-2.0, 3.0, 2.0, -2.0, 0.0, 5.0))
         assertFalse(circleInside(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
+
     }
 
     @Test
