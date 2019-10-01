@@ -74,7 +74,7 @@ fun digitNumber(n: Int): Int {
     do {
         count++
         number /= 10
-    } while (number > 0)
+    } while (number != 0)
     return count
 }
 
@@ -104,17 +104,10 @@ fun fib(n: Int): Int {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
+
 fun lcm(m: Int, n: Int): Int {
     var nok = m * n
-    var m1 = m
-    var n1 = n
-    while (m1 != n1) {
-        when {
-            m1 > n1 -> m1 = (m1 - n1)
-            else -> n1 = (n1 - m1)
-        }
-    }
-    nok /= m1
+    nok /= x(m, n)
     return nok
 }
 
@@ -144,17 +137,8 @@ fun maxDivisor(n: Int): Int = n / minDivisor(n)
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
-    var m1 = m
-    var n1 = n
-    while (m1 != n1) {
-        when {
-            m1 > n1 -> m1 = (m1 - n1)
-            else -> n1 = (n1 - m1)
-        }
-    }
-    return (m1 == 1)
-}
+fun isCoPrime(m: Int, n: Int): Boolean = x(m, n) == 1
+
 
 /**
  * Простая
@@ -164,12 +148,9 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    val rootM = floor(sqrt(m.toDouble()))
-    val rootN = ceil(sqrt(n.toDouble()))
-    for (i in rootM.toInt()..rootN.toInt()) {
-        if (sqr(i) in m..n) return true
-    }
-    return false
+    val rootM = sqrt(m.toDouble()).toInt()
+    val rootN = sqrt(n.toDouble()).toInt()
+    return sqr(rootM) == m || sqr(rootN) == n || rootM < rootN
 }
 
 /**
@@ -216,8 +197,10 @@ fun sin(x: Double, eps: Double): Double {
     var f = 1.0
     var result = 0.0
     var a = 2
+    var lastM = m
     while (f >= eps) {
-        f = m.pow(n) / factorial(n)
+        f = lastM / factorial(n)
+        lastM *= m * m
         n += 2
         result += (-1.0).pow(a) * f
         a += 1
@@ -240,8 +223,10 @@ fun cos(x: Double, eps: Double): Double {
     var result = 0.0
     var n = 2
     var f = 1.0
+    var lastM = 1.0
     while (f >= eps) {
-        f = m.pow(a) / factorial(a)
+        f = lastM / factorial(a)
+        lastM *= m * m
         a += 2
         result += (-1.0).pow(n) * f
         n += 1
@@ -287,27 +272,21 @@ fun isPalindrome(n: Int): Boolean = (n == revert(n))
  */
 fun hasDifferentDigits(n: Int): Boolean {
     var a = n
-    var s = 0
     var k = n
     var l = 0
-    var count = 0
-    while (a != 0) {
-        a /= 10
-        count++
-    }
+    val count = digitNumber(n)
+    var s = 0
     while (k != 0) {
         s = k % 10
         k /= 10
-        if (s != n % 10) break
+        if (s != n % 10) return true
         l++
     }
     return when {
-        n == 0 || count == 1 || l == count -> false
+        n == 0 || count == 1 || count == l -> false
         else -> true
     }
 }
-
-
 
 
 /**
@@ -328,7 +307,7 @@ fun squareSequenceDigit(n: Int): Int {
         count += digitNumber(m)
         a++
     }
-    return (m / (10.0.pow(count - n)).toInt()) % 10
+    return result(m, n, count)
 }
 
 /**
@@ -349,6 +328,17 @@ fun fibSequenceDigit(n: Int): Int {
         count += digitNumber(m)
         a++
     }
-    return (m / (10.0.pow(count - n)).toInt()) % 10
+    return result(m, n, count)
 }
-
+fun x(m: Int, n: Int): Int {
+    var m1 = m
+    var n1 = n
+    while (m1 != n1) {
+        when {
+            m1 > n1 -> m1 = (m1 - n1)
+            else -> n1 = (n1 - m1)
+        }
+    }
+    return m1
+}
+fun result(m: Int, n: Int, count: Int): Int = (m / (10.0.pow(count - n)).toInt()) % 10
