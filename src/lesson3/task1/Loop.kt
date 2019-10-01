@@ -198,9 +198,11 @@ fun sin(x: Double, eps: Double): Double {
     var result = 0.0
     var a = 2
     var lastM = m
-    while (f >= eps) {
-        f = lastM / factorial(n)
+    var lastF = 1.0
+    while (abs(f) >= eps) {
+        f = lastM / lastF
         lastM *= m * m
+        lastF *= (n + 1) * (n + 2)
         n += 2
         result += (-1.0).pow(a) * f
         a += 1
@@ -224,9 +226,11 @@ fun cos(x: Double, eps: Double): Double {
     var n = 2
     var f = 1.0
     var lastM = 1.0
-    while (f >= eps) {
-        f = lastM / factorial(a)
+    var lastF = 1.0
+    while (abs(f) >= eps) {
+        f = lastM / lastF
         lastM *= m * m
+        lastF *= (a + 1) * (a + 2)
         a += 2
         result += (-1.0).pow(n) * f
         n += 1
