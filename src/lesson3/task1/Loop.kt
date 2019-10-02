@@ -105,11 +105,9 @@ fun fib(n: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 
-fun lcm(m: Int, n: Int): Int {
-    var nok = m * n
-    nok /= x(m, n)
-    return nok
-}
+fun lcm(m: Int, n: Int): Int = m * n / minCommonDivider(m, n)
+
+
 
 /**
  * Простая
@@ -137,7 +135,7 @@ fun maxDivisor(n: Int): Int = n / minDivisor(n)
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean = x(m, n) == 1
+fun isCoPrime(m: Int, n: Int): Boolean = minCommonDivider(m, n) == 1
 
 
 /**
@@ -275,21 +273,15 @@ fun isPalindrome(n: Int): Boolean = (n == revert(n))
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun hasDifferentDigits(n: Int): Boolean {
-    var a = n
     var k = n
-    var l = 0
     val count = digitNumber(n)
-    var s = 0
     while (k != 0) {
+        var s = 0
         s = k % 10
         k /= 10
         if (s != n % 10) return true
-        l++
     }
-    return when {
-        n == 0 || count == 1 || count == l -> false
-        else -> true
-    }
+    return false
 }
 
 
@@ -302,17 +294,8 @@ fun hasDifferentDigits(n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int {
-    var a = 1
-    var m = 0
-    var count = 0
-    while (count < n) {
-        m = sqr(a)
-        count += digitNumber(m)
-        a++
-    }
-    return result(m, n, count)
-}
+fun squareSequenceDigit(n: Int): Int = result(n) { b -> sqr(b) }
+
 
 /**
  * Сложная
@@ -323,18 +306,10 @@ fun squareSequenceDigit(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int {
-    var a = 1
-    var m = 0
-    var count = 0
-    while (count < n) {
-        m = fib(a)
-        count += digitNumber(m)
-        a++
-    }
-    return result(m, n, count)
-}
-fun x(m: Int, n: Int): Int {
+fun fibSequenceDigit(n: Int): Int = result(n) { b -> fib(b) }
+
+
+fun minCommonDivider(m: Int, n: Int): Int {
     var m1 = m
     var n1 = n
     while (m1 != n1) {
@@ -345,4 +320,15 @@ fun x(m: Int, n: Int): Int {
     }
     return m1
 }
-fun result(m: Int, n: Int, count: Int): Int = (m / (10.0.pow(count - n)).toInt()) % 10
+
+fun result(n: Int, act: (n: Int) -> Int): Int {
+    var a = 1
+    var m = 0
+    var count = 0
+    while (count < n) {
+        m = act(a)
+        count += digitNumber(m)
+        a++
+    }
+return (m / (10.0.pow(count - n)).toInt()) % 10
+}
