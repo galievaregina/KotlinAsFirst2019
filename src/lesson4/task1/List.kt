@@ -282,7 +282,7 @@ fun convertToString(n: Int, base: Int): String {
     val string = convert(n, base)
     var result = ""
     for (i in string.indices) {
-        if (string[i] < 9) {
+        if (string[i] <= 9) {
             val element = string[i]
             val char = "$element"
             result += char
