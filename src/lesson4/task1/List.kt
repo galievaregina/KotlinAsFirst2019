@@ -286,11 +286,9 @@ fun convertToString(n: Int, base: Int): String {
             val element = string[i]
             val char = "$element"
             result += char
-        } else {
-            val alfavit = "abcdefghijklmnopqrstuvwxyz "
-            result += alfavit[string[i] - 10]
-        }
+        } else result += (string[i] + 87).toChar()
     }
+
     return result
 }
 
@@ -324,17 +322,9 @@ fun decimal(digits: List<Int>, base: Int): Int {
 fun decimalFromString(str: String, base: Int): Int {
     val list = mutableListOf<Int>()
     for (i in str.indices) {
-        if (str[i].toInt() <= 9) {
-            list.add(str[i].toInt())
-        } else {
-            val alfavit = "abcdefghijklmnopqrstuvwxyz "
-            for (j in alfavit.indices) {
-                if (alfavit[j] == str[i]) {
-                    val element = j + 10
-                    list.add(element)
-                }
-            }
-        }
+        if (str[i] <= '9') {
+            list.add(str[i].toString().toInt())
+        } else list.add(str[i].toInt() - 87)
     }
     return decimal(list, base)
 }
