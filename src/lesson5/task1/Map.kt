@@ -234,7 +234,10 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    if (chars.isEmpty()) return false
+    if (chars.isEmpty()) {
+        if (word.isEmpty()) return true
+        return false
+    }
     val a = word.toSet()
     for (i in chars.indices) {
         if (chars[i] !in a) return false
@@ -256,6 +259,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val res = mutableMapOf<String, Int>()
+    if (list.isEmpty()) return res
     for ((i, element) in list.withIndex()) {
         res[element] = res.getOrDefault(element, 0) + i
     }

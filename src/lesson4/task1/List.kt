@@ -462,7 +462,7 @@ fun hundred2(n: Int): String {
         0 -> dex2(n)
         1 -> "сто$d"
         2 -> "двести$d"
-        4 -> one2(m) + "сто" + d
+        4 -> one2(m) + "ста" + d
         3 -> "триста$d"
         else -> one2(m) + "сот" + d
     }
