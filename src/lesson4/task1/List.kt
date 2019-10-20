@@ -360,7 +360,110 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    if (n / 1000 == 0) return hundred(n).trim()
+    val a = n / 1000
+    val b = n % 1000
+    val c = hundred2(a)
+    return when (a % 10) {
+        1 -> (c + " тысяча" + hundred(b)).trim()
+        2, 3, 4 -> (c + " тысячи" + hundred(b)).trim()
+        else -> (c + " тысяч" + hundred(b)).trim()
+    }
+}
 
+fun one(n: Int): String {
+    return when (n) {
+        0 -> ""
+        1 -> " один"
+        2 -> " два"
+        3 -> " три"
+        4 -> " четыре"
+        5 -> " пять"
+        6 -> " шесть"
+        7 -> " семь"
+        8 -> " восемь"
+        else -> " девять"
+    }
+}
 
+fun ten(n: Int): String {
+    return when (n % 10) {
+        2 -> " двенадцать"
+        0 -> " десять"
+        1, 3 -> one(n % 10) + "надцать"
+        4 -> " четырнадцать"
+        else -> one(n % 10).replace("ь", "") + "надцать"
+    }
+}
 
+fun dex(n: Int): String {
+    return when (n / 10) {
+        0 -> one(n)
+        1 -> ten(n)
+        2 -> " двадцать ${one(n % 10)}"
+        3 -> one(n / 10) + "дцать" + one(n % 10)
+        in 5..8 -> one(n / 10) + "десят" + one(n % 10)
+        4 -> " сорок ${one(n % 10)}"
+        else -> " девяносто ${one(n % 10)}"
+    }
+}
+fun hundred(n: Int): String {
+    val m = n / 100
+    val d = dex(n % 100)
+    return when (m) {
+        0 -> dex(n)
+        1 -> "сто" + d
+        2 -> "двести" + d
+        4 -> one(m) + "сто" + d
+        3 -> "триста" + d
+        else -> one(m) + "сот" + d
+    }
+}
+fun one2(n: Int): String {
+    return when (n) {
+        0 -> ""
+        1 -> " одна"
+        2 -> " две"
+        3 -> " три"
+        4 -> " четыре"
+        5 -> " пять"
+        6 -> " шесть"
+        7 -> " семь"
+        8 -> " восемь"
+        else -> " девять"
+    }
+}
+fun ten2(n: Int): String {
+    return when (n % 10) {
+        2 -> " двенадцать"
+        0 -> " десять"
+        1, 3 -> one2(n % 10) + "надцать"
+        4 -> " четырнадцать"
+        else -> one2(n % 10).replace("ь", "") + "надцать"
+    }
+}
+fun dex2(n: Int): String {
+    return when (n / 10) {
+        0 -> one2(n)
+        1 -> ten2(n)
+        2 -> " двадцать${one2(n % 10)}"
+        3 -> one2(n / 10) + "дцать" + one2(n % 10)
+        in 5..8 -> one2(n / 10) + "десят" + one2(n % 10)
+        4 -> " сорок${one2(n % 10)}"
+        else -> " девяносто${one2(n % 10)}"
+    }
+}
+fun hundred2(n: Int): String {
+    val m = n / 100
+    val end1 = "сот"
+    val d = dex2(n % 100)
+    return when (m) {
+        0 -> dex2(n)
+        1 -> "сто$d"
+        2 -> "двести$d"
+        4 -> one2(m) + "сто" + d
+        3 -> "триста$d"
+        else -> one2(m) + "сот" + d
+    }
+}
