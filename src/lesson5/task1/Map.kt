@@ -134,7 +134,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *     -> a changes to mutableMapOf() aka becomes empty
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
-    for ((key, value) in a) {
+    for ((key, value) in b) {
         if (a[key] == b[key]) a.remove(key)
     }
 }
@@ -235,13 +235,12 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     if (chars.isEmpty()) {
-        if (word.isEmpty()) return true
-        return false
+        when {
+            word.isEmpty() -> true
+            else -> false
+        }
     }
     val a = word.toSet()
-    for (i in chars.indices) {
-        if (chars[i] !in a) return false
-    }
     return true
 }
 
@@ -262,10 +261,10 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
     if (list.isEmpty()) return res
     for ((i, element) in list.withIndex()) {
         res[element] = res.getOrDefault(element, 0) + i
+        return res.filterValues { it != 1 }
     }
-
-    return res.filterValues { it != 1 }
 }
+
 /**
  * Средняя
  *
@@ -275,7 +274,16 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean = TODO()
+fun hasAnagrams(words: List<String>): Boolean {
+    val mutable = words.toMutableList()
+    for (i in mutable) {
+        for (j in mutable) {
+            if (i != j && i.toSet().intersect(j.toSet()) != setOf("")) return true
+        }
+    }
+}
+
+
 /**
  * Сложная
  *
