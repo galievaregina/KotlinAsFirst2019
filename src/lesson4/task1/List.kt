@@ -401,11 +401,11 @@ fun dex(n: Int): String {
     return when (n / 10) {
         0 -> one(n)
         1 -> ten(n)
-        2 -> " двадцать ${one(n % 10)}"
+        2 -> " двадцать${one(n % 10)}"
         3 -> one(n / 10) + "дцать" + one(n % 10)
         in 5..8 -> one(n / 10) + "десят" + one(n % 10)
-        4 -> " сорок ${one(n % 10)}"
-        else -> " девяносто ${one(n % 10)}"
+        4 -> " сорок${one(n % 10)}"
+        else -> " девяносто${one(n % 10)}"
     }
 }
 fun hundred(n: Int): String {
@@ -413,10 +413,10 @@ fun hundred(n: Int): String {
     val d = dex(n % 100)
     return when (m) {
         0 -> dex(n)
-        1 -> "сто" + d
-        2 -> "двести" + d
+        1 -> "сто$d"
+        2 -> "двести$d"
         4 -> one(m) + "сто" + d
-        3 -> "триста" + d
+        3 -> "триста$d"
         else -> one(m) + "сот" + d
     }
 }
