@@ -133,11 +133,8 @@ fun abs(v: List<Double>): Double {
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
 fun mean(list: List<Double>): Double {
-    val a = list.isEmpty()
-    return when {
-        a -> 0.0
-        else -> list.sum() / list.size
-    }
+    if (list.isEmpty()) return 0.0
+    return list.sum() / list.size
 }
 
 /**
@@ -151,7 +148,7 @@ fun mean(list: List<Double>): Double {
 fun center(list: MutableList<Double>): MutableList<Double> {
     val b = mean(list)
     for ((index, element) in list.withIndex()) {
-        list[index] = element - b
+        list[index] -= b
     }
     return list
 }
@@ -199,18 +196,12 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    return when {
-        list.isEmpty() -> list
-        else -> {
-            var sum = list.first()
-            for (i in 1 until list.size) {
-                sum += list[i]
-                list[i] = sum
-            }
-            return list
-        }
+    for (i in 0 until list.size) {
+        list[i] = list.fold(list.first()) { previousResult, element -> previousResult + element }
     }
+    return list
 }
+
 
 /**
  * Средняя
@@ -261,10 +252,8 @@ fun convert(n: Int, base: Int): List<Int> {
         m /= base
     }
     result1.add(m)
-    for (i in result1.size - 1 downTo 0) {
-        result2.add(result1[i])
-    }
-    return result2
+    result1.reverse()
+    return result1
 }
 
 /**
@@ -281,12 +270,12 @@ fun convert(n: Int, base: Int): List<Int> {
 fun convertToString(n: Int, base: Int): String {
     val string = convert(n, base)
     var result = ""
-    for (i in string.indices) {
-        if (string[i] <= 9) {
-            val element = string[i]
+    for (i in string) {
+        if (i <= 9) {
+            val element = i
             val char = "$element"
             result += char
-        } else result += (string[i] + 87).toChar()
+        } else result += (i + 87).toChar()
     }
 
     return result
@@ -321,10 +310,10 @@ fun decimal(digits: List<Int>, base: Int): Int {
  */
 fun decimalFromString(str: String, base: Int): Int {
     val list = mutableListOf<Int>()
-    for (i in str.indices) {
-        if (str[i] <= '9') {
-            list.add(str[i].toString().toInt())
-        } else list.add(str[i].toInt() - 87)
+    for (i in str) {
+        if (i <= '9') {
+            list.add(i.toString().toInt())
+        } else list.add(i.toInt() - 87)
     }
     return decimal(list, base)
 }
@@ -338,17 +327,17 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    var m = n
     var res = ""
+    var m = n
     val rom = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
     val count = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
     var i = 12
     while (m != 0) {
         while (m >= count[i]) {
             m -= count[i]
-            res += rom[i]
+            StringBuilder("rom[i]")
         }
-        i -= 1
+        i--
     }
     return res
 }
@@ -408,18 +397,20 @@ fun dex(n: Int): String {
         else -> " девяносто${one(n % 10)}"
     }
 }
+
 fun hundred(n: Int): String {
     val m = n / 100
     val d = dex(n % 100)
     return when (m) {
         0 -> dex(n)
-        1 -> "сто$d"
-        2 -> "двести$d"
+        1 -> " сто$d"
+        2 -> " двести$d"
         4 -> one(m) + "сто" + d
-        3 -> "триста$d"
+        3 -> " триста$d"
         else -> one(m) + "сот" + d
     }
 }
+
 fun one2(n: Int): String {
     return when (n) {
         0 -> ""
@@ -434,6 +425,7 @@ fun one2(n: Int): String {
         else -> " девять"
     }
 }
+
 fun ten2(n: Int): String {
     return when (n % 10) {
         2 -> " двенадцать"
@@ -443,6 +435,7 @@ fun ten2(n: Int): String {
         else -> one2(n % 10).replace("ь", "") + "надцать"
     }
 }
+
 fun dex2(n: Int): String {
     return when (n / 10) {
         0 -> one2(n)
@@ -454,16 +447,18 @@ fun dex2(n: Int): String {
         else -> " девяносто${one2(n % 10)}"
     }
 }
+
 fun hundred2(n: Int): String {
     val m = n / 100
     val end1 = "сот"
     val d = dex2(n % 100)
     return when (m) {
         0 -> dex2(n)
-        1 -> "сто$d"
-        2 -> "двести$d"
+        1 -> " сто$d"
+        2 -> " двести$d"
         4 -> one2(m) + "ста" + d
-        3 -> "триста$d"
+        3 -> " триста$d"
         else -> one2(m) + "сот" + d
     }
 }
+
