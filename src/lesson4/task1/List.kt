@@ -196,8 +196,8 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    for (i in 0 until list.size) {
-        list[i] = list.fold(list.first()) { previousResult, element -> previousResult + element }
+    for (i in 1 until list.size) {
+        list[i] = list[i - 1] + list[i]
     }
     return list
 }
@@ -267,19 +267,15 @@ fun convert(n: Int, base: Int): List<Int> {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String {
-    val string = convert(n, base)
-    var result = ""
-    for (i in string) {
-        if (i <= 9) {
-            val element = i
-            val char = "$element"
-            result += char
-        } else result += (i + 87).toChar()
-    }
 
-    return result
+fun toLetter(n: Int): kotlin.Char {
+    return if (n < 10) ('0' + n)
+    else ('a' + (n - 10))
 }
+
+fun convertToString(n: Int, base: Int): String =
+    convert(n, base).map { n -> toLetter(n) }.joinToString(separator = "")
+
 
 /**
  * Средняя
@@ -308,6 +304,8 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
+
+
 fun decimalFromString(str: String, base: Int): Int {
     val list = mutableListOf<Int>()
     for (i in str) {
@@ -327,7 +325,7 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    var res = ""
+    var res = StringBuilder()
     var m = n
     val rom = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
     val count = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
@@ -335,11 +333,11 @@ fun roman(n: Int): String {
     while (m != 0) {
         while (m >= count[i]) {
             m -= count[i]
-            StringBuilder("rom[i]")
+            res.append(rom[i])
         }
         i--
     }
-    return res
+    return res.toString()
 }
 
 /**
@@ -354,6 +352,7 @@ fun russian(n: Int): String {
     val a = n / 1000
     val b = n % 1000
     val c = hundred2(a)
+    if ((a / 10) % 10 == 1) return (c + " тысяч" + hundred(b)).trim()
     return when (a % 10) {
         1 -> (c + " тысяча" + hundred(b)).trim()
         2, 3, 4 -> (c + " тысячи" + hundred(b)).trim()
