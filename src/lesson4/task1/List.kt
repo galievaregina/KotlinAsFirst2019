@@ -327,7 +327,7 @@ fun roman(n: Int): String {
     val rom = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
     val count = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
     var i = 12
-    while (m != 0) {
+    while (i >= 0) {
         while (m >= count[i]) {
             m -= count[i]
             res.append(rom[i])
@@ -451,7 +451,7 @@ fun hundred2(n: Int): String {
         0 -> dex2(n)
         1 -> " сто$d"
         2 -> " двести$d"
-        4 -> one2(m) + "сто" + d
+        4 -> one2(m) + "ста" + d
         3 -> " триста$d"
         else -> one2(m) + "сот" + d
     }

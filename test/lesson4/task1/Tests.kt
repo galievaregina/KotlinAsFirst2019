@@ -231,7 +231,7 @@ class Tests {
     @Test
     @Tag("Impossible")
     fun russian() {
-        assertEquals("сто двенадцать тысяч четыресто сорок один", russian(112441))
+        assertEquals("четыреста сорок одна тысяча", russian(441000))
         assertEquals("девятьсот девяносто одна тысяча сто сорок пять", russian(991145))
         assertEquals("триста семьдесят пять", russian(375))
         assertEquals("двадцать две тысячи девятьсот шестьдесят четыре", russian(22964))
