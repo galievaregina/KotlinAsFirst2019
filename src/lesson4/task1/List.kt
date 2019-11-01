@@ -4,10 +4,8 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
-import lesson3.task1.isPrime
 import kotlin.math.pow
 import kotlin.math.sqrt
-import kotlin.Char as Char1
 
 /**
  * Пример
@@ -197,7 +195,7 @@ fun polynom(p: List<Int>, x: Int): Int {
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
     for (i in 1 until list.size) {
-        list[i] = list[i - 1] + list[i]
+        list[i] += list[i - 1]
     }
     return list
 }
@@ -217,7 +215,7 @@ fun factorize(n: Int): List<Int> {
     while (m > 1) {
         if (m % primeD == 0) {
             while (m % primeD == 0) {
-                result.add(primeD)
+                result += primeD
                 m /= primeD
             }
         }
@@ -244,7 +242,6 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
  */
 fun convert(n: Int, base: Int): List<Int> {
     val result1 = mutableListOf<Int>()
-    val result2 = mutableListOf<Int>()
     var m = n
     if (n < base) return listOf(n)
     while (m >= base) {
@@ -310,8 +307,8 @@ fun decimalFromString(str: String, base: Int): Int {
     val list = mutableListOf<Int>()
     for (i in str) {
         if (i <= '9') {
-            list.add(i.toString().toInt())
-        } else list.add(i.toInt() - 87)
+            list.add(i - '0')
+        } else list.add(i - 'a' + 10)
     }
     return decimal(list, base)
 }
@@ -325,7 +322,7 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    var res = StringBuilder()
+    val res = StringBuilder()
     var m = n
     val rom = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
     val count = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
@@ -449,13 +446,12 @@ fun dex2(n: Int): String {
 
 fun hundred2(n: Int): String {
     val m = n / 100
-    val end1 = "сот"
     val d = dex2(n % 100)
     return when (m) {
         0 -> dex2(n)
         1 -> " сто$d"
         2 -> " двести$d"
-        4 -> one2(m) + "ста" + d
+        4 -> one2(m) + "сто" + d
         3 -> " триста$d"
         else -> one2(m) + "сот" + d
     }

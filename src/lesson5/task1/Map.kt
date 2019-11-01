@@ -112,11 +112,9 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
     var count = 0
     for ((key, value) in a) {
-        if (a[key] == b[key]) {
-            count++
-        }
+        if (a[key] == b[key]) count++
     }
-    return (count != 0)
+    return (count != 0) && (a.isNotEmpty() && b.isNotEmpty())
 }
 
 /**
@@ -235,9 +233,13 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     if (chars.isEmpty()) return word.isEmpty()
-    val change = word.toLowerCase()
-    for (element in change) {
-        if (element !in chars) return false
+    val changeWord = word.toLowerCase()
+    val mutableChars = chars.toMutableList()
+    for (i in chars) {
+        mutableChars += i.toLowerCase()
+    }
+    for (element in changeWord) {
+        if (element !in mutableChars) return false
     }
     return true
 }
@@ -284,7 +286,8 @@ fun hasAnagrams(words: List<String>): Boolean {
             if (i == j) count++
         }
     }
-    return count > 1
+    return count > new.size
+
 }
 
 
