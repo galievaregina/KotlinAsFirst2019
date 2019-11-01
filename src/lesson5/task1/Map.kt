@@ -114,7 +114,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
     for ((key, value) in a) {
         if (a[key] == b[key]) count++
     }
-    return (count != 0) && (a.isEmpty() && b.isEmpty())
+    return (count != 0) || (a.isEmpty() && b.isEmpty())
 }
 
 /**

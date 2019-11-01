@@ -401,7 +401,7 @@ fun hundred(n: Int): String {
         0 -> dex(n)
         1 -> " сто$d"
         2 -> " двести$d"
-        4 -> one(m) + "сто" + d
+        4 -> one(m) + "ста" + d
         3 -> " триста$d"
         else -> one(m) + "сот" + d
     }
