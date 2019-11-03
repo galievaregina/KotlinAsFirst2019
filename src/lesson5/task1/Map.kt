@@ -3,6 +3,7 @@
 package lesson5.task1
 
 import lesson8.task1.findNearestCirclePair
+import kotlin.math.max
 
 /**
  * Пример
@@ -109,13 +110,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
-    var count = 0
-    for ((key, value) in a) {
-        if (a[key] == b[key]) count++
-    }
-    return (count != 0) || (a.isEmpty() && b.isEmpty())
-}
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.keys.all { a[it] == b[it] }
 
 /**
  * Простая
@@ -357,4 +352,33 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val listName = mutableSetOf<String>()
+    val cost = mutableListOf<Int>()
+    val weight = mutableListOf<Int>()
+    val names = mutableListOf<String>()
+    val res = Array(treasures.size + 1) { Array(capacity + 1) { 0 } }
+    for ((name, value) in treasures) {
+        cost.add(value.second)
+        weight.add(value.first)
+        names.add(name)
+    }
+    for (i in 1..treasures.size) {
+        for (j in 1..capacity) {
+            if (weight[i - 1] > j) {
+                res[i][j] = res[i - 1][j]
+            } else res[i][j] = max(res[i - 1][j], res[i - 1][j - weight[i - 1]] + cost[i])
+
+        }
+    }
+    var mass = capacity
+    var length = treasures.size
+    while (length > 0) {
+        if (res[length - 1][mass] == res[length][mass]) length-- else {
+            listName.add(names[length - 1])
+            mass -= weight[length - 1]
+            length--
+        }
+    }
+    return listName
+}
