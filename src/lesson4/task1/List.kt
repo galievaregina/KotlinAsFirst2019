@@ -265,10 +265,8 @@ fun convert(n: Int, base: Int): List<Int> {
  * (например, n.toString(base) и подобные), запрещается.
  */
 
-fun toLetter(n: Int): kotlin.Char {
-    return if (n < 10) ('0' + n)
-    else ('a' + (n - 10))
-}
+fun toLetter(n: Int): kotlin.Char = if (n < 10) ('0' + n) else ('a' + (n - 10))
+
 
 fun convertToString(n: Int, base: Int): String =
     convert(n, base).map { n -> toLetter(n) }.joinToString(separator = "")
@@ -306,9 +304,8 @@ fun decimal(digits: List<Int>, base: Int): Int {
 fun decimalFromString(str: String, base: Int): Int {
     val list = mutableListOf<Int>()
     for (i in str) {
-        if (i <= '9') {
-            list.add(i - '0')
-        } else list.add(i - 'a' + 10)
+        if (i <= '9') list.add(i - '0')
+        else list.add(i - 'a' + 10)
     }
     return decimal(list, base)
 }
