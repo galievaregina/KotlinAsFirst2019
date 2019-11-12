@@ -321,13 +321,11 @@ fun roman(n: Int): String {
     var m = n
     val rom = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
     val count = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
-    var i = 12
-    while (i >= 0) {
+    for (i in 12 downTo 0) {
         while (m >= count[i]) {
             m -= count[i]
             res.append(rom[i])
         }
-        i--
     }
     return res.toString()
 }
