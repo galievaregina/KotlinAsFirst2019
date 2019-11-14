@@ -2,10 +2,7 @@
 
 package lesson6.task1
 
-import lesson3.task1.result
-import java.lang.IllegalArgumentException
-import java.lang.StringBuilder
-import kotlin.IndexOutOfBoundsException as IndexOutOfBoundsException1
+import lesson2.task2.daysInMonth
 
 /**
  * Пример
@@ -75,26 +72,18 @@ fun main() {
  */
 fun dateStrToDigit(str: String): String {
     val parts = str.split(" ")
-    if (parts.size < 3) return ""
     try {
-        val b = parts[0].toInt()
-        val c = parts[2].toInt()
-        if (parts[1] == "февраля" && ((c % 4 != 0 || (c % 400 != 0 && c % 100 == 0) && b > 28) || b > 29)) return ""
-        if (b > 31 || b < 1 || c < 1) return ""
-        if (b > 30) when (parts[1]) {
-            "апреля", "июня", "сентября", "ноября" -> return ""
-        }
-        val month = listOf(
+        val day = parts[0].toInt()
+        val year = parts[2].toInt()
+        if (parts.size != 3 || parts[2].length != 4) return ""
+        val monthName = listOf(
             "января", "февраля", "марта", "апреля", "мая", "июня",
             "июля", "августа", "сентября", "октября", "ноября", "декабря"
         )
-        var a = 0
-        for (element in month) {
-            if (element == parts[1]) a = month.indexOf(element) + 1
-        }
-        if (a == 0) return ""
-        return String.format("%02d.%02d.%4d", b, a, c)
-    } catch (e: NumberFormatException) {
+        val month = monthName.indexOf(parts[1]) + 1
+        if (day !in 1..daysInMonth(month, year) || month !in 1..12) return ""
+        return String.format("%02d.%02d.%4d", day, month, year)
+    } catch (e: Exception) {
         return ""
     }
 }
@@ -112,27 +101,18 @@ fun dateStrToDigit(str: String): String {
  */
 fun dateDigitToStr(digital: String): String {
     val parts = digital.split(".")
-    if (parts.size < 3) return ""
+    if (parts.size != 3 || parts[2].length != 4 || parts[1].length != 2) return ""
     try {
-        val b = parts[0].toInt()
-        val c = parts[2].toInt()
-        if (parts[2].length != 4) return ""
-        if (parts[1] == "02" && ((c % 4 != 0 || (c % 400 != 0 && c % 100 == 0) && b > 28) || b > 29)) return ""
-        if (b > 31 || b < 1 || c < 1) return ""
-        if (b > 30) when (parts[1]) {
-            "04", "06", "09", "11" -> return ""
-        }
-        var a = ""
-        val month = listOf(
+        val day = parts[0].toInt()
+        val year = parts[2].toInt()
+        if (day !in 1..daysInMonth(parts[1].toInt(), year)) return ""
+        val monthName = listOf(
             "января", "февраля", "марта", "апреля", "мая", "июня",
             "июля", "августа", "сентября", "октября", "ноября", "декабря"
         )
-        for (element in month) {
-            if (parts[1] == String.format("%02d", month.indexOf(element) + 1)) a = element
-        }
-        if (a == "") return ""
-        return String.format("%2d $a %4d", b, c).trim()
-    } catch (e: NumberFormatException) {
+        val month = monthName[parts[1].toInt() - 1]
+        return String.format("$day $month $year")
+    } catch (e: Exception) {
         return ""
     }
 }
@@ -214,6 +194,7 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
+    if (expression.isEmpty()) throw IllegalArgumentException()
     val parts = expression.split(" ")
     var res = 0
     require(!(expression.first() == '+' || expression.first() == '-'))
@@ -247,8 +228,8 @@ fun plusMinus(expression: String): Int {
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int {
-    val commonWords = Regex(""" ([\S]+)\s\1""").find(str.toLowerCase()) ?: return -1
-    return commonWords.range.first + 1
+    val commonWords = Regex(""" ([\S]+)\s\1""").find(" $str".toLowerCase()) ?: return -1
+    return commonWords.range.first
 }
 
 
@@ -315,4 +296,51 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    require(commands.matches(Regex("""[+\-\]\[\s><]*""")))
+    var brackets = 0
+    for (element in commands) {
+        when (element) {
+            '[' -> brackets++
+            ']' -> brackets--
+        }
+        require(brackets >= 0)
+    }
+    require(brackets == 0)
+    val result = mutableListOf<Int>()
+    var count = 0
+    var index = 0
+    var number = cells / 2
+    for (i in 0 until cells) result.add(0)
+    brackets = 0
+    while (count != limit && index != commands.length) {
+        if (number == -1 || number == result.size) throw IllegalStateException()
+        when (commands[index]) {
+            '>' -> number++
+            '<' -> number--
+            '+' -> result[number]++
+            '-' -> result[number]--
+            ' ' -> number
+            '[' -> {
+                if (result[number] == 0) {
+                    while (commands[index] != ']') index++
+                }
+            }
+            ']' -> {
+                if (result[number] != 0) {
+                    while (commands[index] != '[' || brackets != 1) {
+                        if (commands[index] == ']') brackets++
+                        if (commands[index] == '[') brackets--
+                        index--
+                    }
+                    brackets--
+                }
+            }
+        }
+        count++
+        index++
+    }
+    return result
+}
+
+
