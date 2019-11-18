@@ -265,10 +265,7 @@ fun convert(n: Int, base: Int): List<Int> {
  * (например, n.toString(base) и подобные), запрещается.
  */
 fun convertToString(n: Int, base: Int): String =
-    convert(n, base).map { n -> toLetter(n) }.joinToString(separator = "")
-
-fun toLetter(n: Int): kotlin.Char = if (n < 10) ('0' + n) else ('a' + (n - 10))
-
+    convert(n, base).map { n -> if (n < 10) ('0' + n) else ('a' + (n - 10)) }.joinToString(separator = "")
 
 /**
  * Средняя
