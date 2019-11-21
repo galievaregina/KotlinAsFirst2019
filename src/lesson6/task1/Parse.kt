@@ -75,7 +75,7 @@ fun dateStrToDigit(str: String): String {
     try {
         val day = parts[0].toInt()
         val year = parts[2].toInt()
-        if (parts.size != 3 || parts[2].length != 4) return ""
+        if (parts.size != 3 || year <= 0) return ""
         val monthName = listOf(
             "января", "февраля", "марта", "апреля", "мая", "июня",
             "июля", "августа", "сентября", "октября", "ноября", "декабря"
@@ -101,8 +101,8 @@ fun dateStrToDigit(str: String): String {
  */
 fun dateDigitToStr(digital: String): String {
     val parts = digital.split(".")
-    if (parts.size != 3 || parts[2].length != 4 || parts[1].length != 2) return ""
     try {
+        if (parts.size != 3 || parts[1].length != 2 || parts[2].toInt() <= 0) return ""
         val day = parts[0].toInt()
         val year = parts[2].toInt()
         if (day !in 1..daysInMonth(parts[1].toInt(), year)) return ""
@@ -194,7 +194,7 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    if (expression.isEmpty()) throw IllegalArgumentException()
+    require(!expression.isEmpty())
     val parts = expression.split(" ")
     var res = 0
     require(!(expression.first() == '+' || expression.first() == '-'))
@@ -314,7 +314,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     for (i in 0 until cells) result.add(0)
     brackets = 0
     while (count != limit && index != commands.length) {
-        if (number == -1 || number == result.size) throw IllegalStateException()
+        check(!(number == -1 || number == result.size))
         when (commands[index]) {
             '>' -> number++
             '<' -> number--
@@ -323,7 +323,12 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
             ' ' -> number
             '[' -> {
                 if (result[number] == 0) {
-                    while (commands[index] != ']') index++
+                    while (commands[index] != ']' || brackets != 1) {
+                        if (commands[index] == ']') brackets--
+                        if (commands[index] == '[') brackets++
+                        index++
+                    }
+                    brackets--
                 }
             }
             ']' -> {

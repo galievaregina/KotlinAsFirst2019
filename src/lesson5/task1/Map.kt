@@ -2,7 +2,6 @@
 
 package lesson5.task1
 
-import lesson8.task1.findNearestCirclePair
 import kotlin.math.max
 
 /**
@@ -95,8 +94,11 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    val name = mutableMapOf<Int, List<String>>()
-    for ((key, value) in grades) name[value] = name.getOrDefault(value, listOf()) + key
+    val name = mutableMapOf<Int, MutableList<String>>()
+    for ((key, value) in grades) {
+        if (name[value] == null) name[value] = mutableListOf(key)
+        else name[value]!!.add(key)
+    }
     return name
 }
 
@@ -110,7 +112,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.keys.all { a[it] == b[it] }
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.all { b[it.key] == it.value }
 
 /**
  * Простая
@@ -128,7 +130,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.keys
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
     for ((key, value) in b) {
-        if (a[key] == b[key]) a.remove(key)
+        if (a[key] == value) a.remove(key)
     }
 }
 
@@ -179,15 +181,12 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    val res = mutableMapOf<String, List<Double>>()
-    val res1 = mutableMapOf<String, Double>()
-    for (element in stockPrices) {
-        res[element.first] = res.getOrDefault(element.first, listOf()) + element.second
+    val helpMap = mutableMapOf<String, MutableList<Double>>()
+    for ((first, second) in stockPrices) {
+        if (helpMap[first] == null) helpMap[first] = mutableListOf(second)
+        else helpMap[first]!!.add(second)
     }
-    for ((key, value) in res) {
-        res1[key] = value.sum() / value.size
-    }
-    return res1
+    return helpMap.mapValues { it.value.sum() / it.value.size }
 }
 
 /**
@@ -228,10 +227,10 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     if (chars.isEmpty()) return word.isEmpty()
-    val changeWord = word.toLowerCase()
-    val mutableChars = chars.toMutableList()
-    for (i in chars) {
-        mutableChars += i.toLowerCase()
+    val changeWord = word.toLowerCase().toSet()
+    val mutableChars = chars.toMutableSet()
+    for (element in chars) {
+        mutableChars += element.toLowerCase()
     }
     for (element in changeWord) {
         if (element !in mutableChars) return false
@@ -253,8 +252,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val res = mutableMapOf<String, Int>()
-    if (list.isEmpty()) return res
-    for ((i, element) in list.withIndex()) {
+    for (element in list) {
         res[element] = res.getOrDefault(element, 0) + 1
     }
     return res.filterValues { it != 1 }
@@ -270,19 +268,15 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    val new = mutableListOf<Set<Char>>()
-    var count = 0
     if (words.isEmpty()) return false
-    for (element in words) {
-        new.add(element.toSet())
+    val new = words.toSet()
+    val res = mutableSetOf<Set<Char>>()
+    for (element in new) {
+        val a = element.toSet()
+        if (res.contains(a)) return true
+        else res.add(a)
     }
-    for (i in new) {
-        for (j in new) {
-            if (i == j) count++
-        }
-    }
-    return count > new.size
-
+    return false
 }
 
 
