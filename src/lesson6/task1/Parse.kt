@@ -75,14 +75,14 @@ fun dateStrToDigit(str: String): String {
     try {
         val day = parts[0].toInt()
         val year = parts[2].toInt()
-        if (parts.size != 3 || year <= 0) return ""
+        if (parts.size != 3 || year < 0) return ""
         val monthName = listOf(
             "января", "февраля", "марта", "апреля", "мая", "июня",
             "июля", "августа", "сентября", "октября", "ноября", "декабря"
         )
         val month = monthName.indexOf(parts[1]) + 1
         if (day !in 1..daysInMonth(month, year) || month !in 1..12) return ""
-        return String.format("%02d.%02d.%4d", day, month, year)
+        return String.format("%02d.%02d.$year", day, month)
     } catch (e: Exception) {
         return ""
     }
@@ -102,7 +102,7 @@ fun dateStrToDigit(str: String): String {
 fun dateDigitToStr(digital: String): String {
     val parts = digital.split(".")
     try {
-        if (parts.size != 3 || parts[1].length != 2 || parts[2].toInt() <= 0) return ""
+        if (parts.size != 3 || parts[1].length != 2 || parts[2].toInt() < 0) return ""
         val day = parts[0].toInt()
         val year = parts[2].toInt()
         if (day !in 1..daysInMonth(parts[1].toInt(), year)) return ""
@@ -194,11 +194,11 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    require(!expression.isEmpty())
+    require(expression.isNotEmpty())
     val parts = expression.split(" ")
     var res = 0
     require(!(expression.first() == '+' || expression.first() == '-'))
-    require(expression.matches(Regex("""[\d\s+\-]*""")))
+    require(expression.matches(Regex("""[\d\s+\-]*""")) || expression.isNotEmpty())
     for (element in parts) {
         require(!(element != "+" && element != "-" && element.toInt() < 0))
     }
@@ -312,6 +312,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var index = 0
     var number = cells / 2
     for (i in 0 until cells) result.add(0)
+    check((number != 0 || !commands.matches(Regex("""[><\[\]]*"""))))
     brackets = 0
     while (count != limit && index != commands.length) {
         check(!(number == -1 || number == result.size))

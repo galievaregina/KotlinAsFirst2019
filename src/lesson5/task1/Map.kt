@@ -268,7 +268,6 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    if (words.isEmpty()) return false
     val new = words.toSet()
     val res = mutableSetOf<Set<Char>>()
     for (element in new) {
@@ -371,7 +370,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         if (res[length - 1][mass] == res[length][mass]) length-- else {
             listName.add(names[length - 1])
             length--
-            mass -= weight[length - 1]
+            mass -= weight[length]
         }
     }
     return listName
