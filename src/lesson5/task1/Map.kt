@@ -367,11 +367,11 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     var length = treasures.size
     var mass = capacity
     while (length > 0) {
-        if (res[length - 1][mass] == res[length][mass]) length-- else {
+        if (res[length - 1][mass] != res[length][mass]) {
             listName.add(names[length - 1])
+            mass -= weight[length - 1]
             length--
-            mass -= weight[length]
-        }
+        } else length--
     }
     return listName
 }
