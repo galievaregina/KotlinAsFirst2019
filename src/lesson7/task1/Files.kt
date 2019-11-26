@@ -96,7 +96,7 @@ fun centerFile(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     var maxStrLength = 0
     for (line in File(inputName).readLines()) {
-        if (line.length > maxStrLength) maxStrLength = line.length
+        if (line.length >= maxStrLength) maxStrLength = line.length
     }
     for (line in File(inputName).readLines()) {
         if (line.length < maxStrLength) {
@@ -237,8 +237,8 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
                     count++
                     commonLetter.add(letter)
                 }
-                if (count == line.length) res.add(line)
             }
+            if (count == line.length) res.add(line) else max = 0
         }
     }
     writer.write(res.toString().removeSurrounding("[", "]"))
@@ -333,14 +333,21 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                     }
                 }
                 '~' -> {
-                    if (listSymbol.isEmpty() && line[index + 1] == '~') {
-                        writer.write("<s>")
-                        listSymbol.add("~~")
-                    } else if (listSymbol.isNotEmpty()) {
-                        writer.write("</s>")
-                        listSymbol.remove(listSymbol.last())
+                    if (line[index + 1] == '~') {
+                        if (listSymbol.isEmpty()) {
+                            writer.write("<s>")
+                            listSymbol.add("~~")
+                        } else {
+                            if (listSymbol.last() != "~~") {
+                                writer.write("<s>")
+                                listSymbol.add("~~")
+                            } else {
+                                writer.write("</s>")
+                                listSymbol.remove(listSymbol.last())
+                            }
+                        }
+                        index += 2
                     }
-                    index += 2
                 }
                 else -> {
                     writer.write(line[index].toString())
