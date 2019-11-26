@@ -96,10 +96,10 @@ fun centerFile(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     var maxStrLength = 0
     for (line in File(inputName).readLines()) {
-        if (line.length >= maxStrLength) maxStrLength = line.length
+        if (line.trim().length >= maxStrLength) maxStrLength = line.trim().length
     }
     for (line in File(inputName).readLines()) {
-        if (line.length < maxStrLength) {
+        if (line.trim().length < maxStrLength) {
             writer.write(" ".repeat((maxStrLength - line.trim().length) / 2))
         }
         writer.write(line.trim())
@@ -227,18 +227,23 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     var max = 0
     val res = mutableListOf<String>()
     for (line in File(inputName).readLines()) {
-        val new = line.toLowerCase()
-        if (line.length >= max) {
-            var count = 0
-            val commonLetter = mutableSetOf<Char>()
-            max = line.length
-            for (letter in new) {
-                if (letter !in commonLetter) {
-                    count++
-                    commonLetter.add(letter)
+        val commonLetter = mutableSetOf<Char>()
+        var count = 0
+        for (letter in line.toLowerCase()) {
+            if (letter !in commonLetter) {
+                count++
+                commonLetter.add(letter)
+            }
+            if (count == line.length) {
+                when {
+                    line.length > max -> {
+                        max = line.length
+                        res.clear()
+                        res.add(line)
+                    }
+                    line.length == max -> res.add(line)
                 }
             }
-            if (count == line.length) res.add(line) else max = 0
         }
     }
     writer.write(res.toString().removeSurrounding("[", "]"))
