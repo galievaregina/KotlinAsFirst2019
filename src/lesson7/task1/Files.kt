@@ -140,7 +140,6 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     val newLine = mutableListOf<String>()
     val string = StringBuilder()
     var max = 0
-    var index = 0
     for (line in File(inputName).readLines()) {
         string.clear()
         val parts = line.trim().split(" ").toMutableList()
@@ -342,24 +341,27 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         while (index < line.length) {
             when (line[index]) {
                 '*' -> {
-                    if (line[index + 1] != '*') {
-                        if (listSymbol.isEmpty() || listSymbol.last() != "*") {
-                            writer.write("<i>")
-                            listSymbol.add("*")
-                        } else {
-                            writer.write("</i>")
-                            listSymbol.remove(listSymbol.last())
+                    when {
+                        line[index + 1] == '*' && index + 1 <= line.length -> {
+                            if (listSymbol.isEmpty() || listSymbol.last() != "**") {
+                                writer.write("<b>")
+                                listSymbol.add("**")
+                            } else {
+                                writer.write("</b>")
+                                listSymbol.remove(listSymbol.last())
+                            }
+                            index += 2
                         }
-                        index++
-                    } else {
-                        if (listSymbol.isEmpty() || listSymbol.last() != "**") {
-                            writer.write("<b>")
-                            listSymbol.add("**")
-                        } else {
-                            writer.write("</b>")
-                            listSymbol.remove(listSymbol.last())
+                        else -> {
+                            if (listSymbol.isEmpty() || listSymbol.last() != "*") {
+                                writer.write("<i>")
+                                listSymbol.add("*")
+                            } else {
+                                writer.write("</i>")
+                                listSymbol.remove(listSymbol.last())
+                            }
+                            index++
                         }
-                        index += 2
                     }
                 }
                 '~' -> {
