@@ -313,7 +313,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var number = cells / 2
     for (i in 0 until cells) result.add(0)
     if (commands.isEmpty()) return result
-    check((number != 0 || !commands.matches(Regex("""[><\[\]]*"""))))
+    check((number != 0 || !commands.matches(Regex("""[><]*"""))))
     brackets = 0
     while (count != limit && index != commands.length) {
         check(!(number == -1 || number == result.size))
