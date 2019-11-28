@@ -342,7 +342,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             when (line[index]) {
                 '*' -> {
                     when {
-                        line[index + 1] == '*' && index + 1 <= line.length -> {
+                        line[index + 1] == '*' && index + 1 < line.length -> {
                             if (listSymbol.isEmpty() || listSymbol.last() != "**") {
                                 writer.write("<b>")
                                 listSymbol.add("**")
