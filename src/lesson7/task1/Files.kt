@@ -138,11 +138,17 @@ fun centerFile(inputName: String, outputName: String) {
 fun alignFileByWidth(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     val newLine = mutableListOf<String>()
+    val string = StringBuilder()
     var max = 0
     var index = 0
     for (line in File(inputName).readLines()) {
-        newLine.add(line.trim())
-        if (line.trim().length >= max) max = line.trim().length
+        val parts = line.trim().split(" ").toMutableList()
+        for (element in parts) {
+            string.append(element)
+            if (element.isNotEmpty()) string.append(" ")
+        }
+        newLine.add(string.toString().trim())
+        if (string.trim().length >= max) max = string.trim().length
     }
     for (element in newLine) {
         val parts = element.split(" ").toMutableList()
@@ -325,52 +331,35 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 '*' -> {
                     if (index + 1 < line.length) {
                         if (line[index + 1] != '*') {
-                            if (listSymbol.isEmpty()) {
+                            if (listSymbol.isEmpty() || listSymbol.last() != "*") {
                                 writer.write("<i>")
                                 listSymbol.add("*")
                             } else {
-                                if (listSymbol.last() != "*") {
-                                    writer.write("<i>")
-                                    listSymbol.add("*")
-                                } else {
-                                    writer.write("</i>")
-                                    listSymbol.remove(listSymbol.last())
-                                }
+                                writer.write("</i>")
+                                listSymbol.remove(listSymbol.last())
                             }
                             index++
                         } else {
-                            if (listSymbol.isEmpty()) {
+                            if (listSymbol.isEmpty() || listSymbol.last() != "**") {
                                 writer.write("<b>")
                                 listSymbol.add("**")
                             } else {
-                                if (listSymbol.last() != "**") {
-                                    writer.write("<b>")
-                                    listSymbol.add("**")
-                                } else {
-                                    writer.write("</b>")
-                                    listSymbol.remove(listSymbol.last())
-                                }
+                                writer.write("</b>")
+                                listSymbol.remove(listSymbol.last())
                             }
                             index += 2
                         }
                     }
                 }
                 '~' -> {
-                    if (line[index + 1] == '~') {
-                        if (listSymbol.isEmpty()) {
-                            writer.write("<s>")
-                            listSymbol.add("~~")
-                        } else {
-                            if (listSymbol.last() != "~~") {
-                                writer.write("<s>")
-                                listSymbol.add("~~")
-                            } else {
-                                writer.write("</s>")
-                                listSymbol.remove(listSymbol.last())
-                            }
-                        }
-                        index += 2
+                    if (listSymbol.isEmpty() || listSymbol.last() != "~~") {
+                        writer.write("<s>")
+                        listSymbol.add("~~")
+                    } else {
+                        writer.write("</s>")
+                        listSymbol.remove(listSymbol.last())
                     }
+                    index += 2
                 }
                 else -> {
                     writer.write(line[index].toString())
