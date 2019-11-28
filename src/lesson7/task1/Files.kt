@@ -138,8 +138,6 @@ fun centerFile(inputName: String, outputName: String) {
 fun alignFileByWidth(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     val newLine = mutableListOf<String>()
-    val words = mutableListOf<Int>()
-    val length = mutableListOf<Int>()
     var max = 0
     var index = 0
     for (line in File(inputName).readLines()) {
@@ -147,7 +145,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
         if (line.trim().length >= max) max = line.trim().length
     }
     for (element in newLine) {
-        val parts = element.split(Regex("""[ ]*""")).toMutableList()
+        val parts = element.split(" ").toMutableList()
         if (parts.size == 1) {
             writer.write(parts.toString())
             writer.newLine()
@@ -317,10 +315,10 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     writer.write("<html>\n<body>\n<p>\n")
+    val listSymbol = mutableListOf<String>()
     val file = File(inputName).readLines()
-    for ((index, line) in file.withIndex()) {
-        if (line.isEmpty() && index != 0 && file[index - 1].isNotEmpty()) writer.write("</p>\n<p>\n")
-        val listSymbol = mutableListOf<String>()
+    for ((i, line) in file.withIndex()) {
+        if (line.isEmpty() && i != 0 && file[i - 1].isNotEmpty()) writer.write("</p>\n<p>\n")
         var index = 0
         while (index < line.length) {
             when (line[index]) {
