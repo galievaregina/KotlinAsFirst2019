@@ -142,24 +142,37 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     var max = 0
     var index = 0
     for (line in File(inputName).readLines()) {
+        string.clear()
         val parts = line.trim().split(" ").toMutableList()
         for (element in parts) {
             string.append(element)
             if (element.isNotEmpty()) string.append(" ")
         }
         newLine.add(string.toString().trim())
-        if (string.trim().length >= max) max = string.trim().length
+        if (string.toString().trim().length >= max) max = string.toString().trim().length
     }
     for (element in newLine) {
+        string.clear()
         val parts = element.split(" ").toMutableList()
         if (parts.size == 1) {
-            writer.write(parts.toString())
+            writer.write(element)
             writer.newLine()
+            continue
         }
-        if (parts.size < max) {
-
+        val numberOfSpaces = max - element.length + parts.size - 1
+        var counter = numberOfSpaces % (parts.size - 1)
+        for (smth in parts) {
+            string.append(smth)
+            string.append(" ".repeat(numberOfSpaces / (parts.size - 1)))
+            if (counter > 0) {
+                string.append(" ")
+                counter--
+            }
         }
+        writer.write(string.toString().trim())
+        writer.newLine()
     }
+    writer.close()
 }
 
 /**
