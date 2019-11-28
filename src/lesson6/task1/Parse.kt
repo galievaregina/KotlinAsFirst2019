@@ -198,7 +198,7 @@ fun plusMinus(expression: String): Int {
     val parts = expression.split(" ")
     var res = 0
     require(!(expression.first() == '+' || expression.first() == '-'))
-    require(expression.matches(Regex("""[\d\s+\-]*""")) || expression.isNotEmpty())
+    require(expression.matches(Regex("""[\d\s+\-]+""")))
     for (element in parts) {
         require(!(element != "+" && element != "-" && element.toInt() < 0))
     }
