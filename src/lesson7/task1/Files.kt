@@ -342,26 +342,24 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         while (index < line.length) {
             when (line[index]) {
                 '*' -> {
-                    if (index + 1 < line.length) {
-                        if (line[index + 1] != '*') {
-                            if (listSymbol.isEmpty() || listSymbol.last() != "*") {
-                                writer.write("<i>")
-                                listSymbol.add("*")
-                            } else {
-                                writer.write("</i>")
-                                listSymbol.remove(listSymbol.last())
-                            }
-                            index++
+                    if (line[index + 1] != '*') {
+                        if (listSymbol.isEmpty() || listSymbol.last() != "*") {
+                            writer.write("<i>")
+                            listSymbol.add("*")
                         } else {
-                            if (listSymbol.isEmpty() || listSymbol.last() != "**") {
-                                writer.write("<b>")
-                                listSymbol.add("**")
-                            } else {
-                                writer.write("</b>")
-                                listSymbol.remove(listSymbol.last())
-                            }
-                            index += 2
+                            writer.write("</i>")
+                            listSymbol.remove(listSymbol.last())
                         }
+                        index++
+                    } else {
+                        if (listSymbol.isEmpty() || listSymbol.last() != "**") {
+                            writer.write("<b>")
+                            listSymbol.add("**")
+                        } else {
+                            writer.write("</b>")
+                            listSymbol.remove(listSymbol.last())
+                        }
+                        index += 2
                     }
                 }
                 '~' -> {

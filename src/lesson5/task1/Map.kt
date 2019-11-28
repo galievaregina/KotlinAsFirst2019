@@ -272,7 +272,7 @@ fun hasAnagrams(words: List<String>): Boolean {
     val res = mutableSetOf<Set<Char>>()
     for (element in new) {
         val a = element.toSet()
-        if (res.contains(a)) return true
+        if (res.contains(a) || (res.isEmpty() && a.isEmpty())) return true
         else res.add(a)
     }
     return false
