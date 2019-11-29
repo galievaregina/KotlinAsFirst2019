@@ -335,51 +335,56 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     writer.write("<html>\n<body>\n<p>\n")
     val listSymbol = mutableListOf<String>()
     val file = File(inputName).readLines()
-    for ((i, line) in file.withIndex()) {
-        if (line.isEmpty() && i != 0 && file[i - 1].isNotEmpty()) writer.write("</p>\n<p>\n")
-        var index = 0
-        while (index < line.length) {
-            when (line[index]) {
-                '*' -> {
-                    when {
-                        line[index + 1] == '*' && index + 1 < line.length -> {
-                            if (listSymbol.isEmpty() || listSymbol.last() != "**") {
-                                writer.write("<b>")
-                                listSymbol.add("**")
-                            } else {
-                                writer.write("</b>")
-                                listSymbol.remove(listSymbol.last())
+    try {
+        for ((i, line) in file.withIndex()) {
+            if (line.isEmpty() && i != 0 && file[i - 1].isNotEmpty()) writer.write("</p>\n<p>\n")
+            var index = 0
+            while (index < line.length) {
+                when (line[index]) {
+                    '*' -> {
+                        when {
+                            line[index + 1] == '*' && index + 1 < line.length -> {
+                                if (listSymbol.isEmpty() || listSymbol.last() != "**") {
+                                    writer.write("<b>")
+                                    listSymbol.add("**")
+                                } else {
+                                    writer.write("</b>")
+                                    listSymbol.remove(listSymbol.last())
+                                }
+                                index += 2
                             }
-                            index += 2
-                        }
-                        else -> {
-                            if (listSymbol.isEmpty() || listSymbol.last() != "*") {
-                                writer.write("<i>")
-                                listSymbol.add("*")
-                            } else {
-                                writer.write("</i>")
-                                listSymbol.remove(listSymbol.last())
+                            else -> {
+                                if (listSymbol.isEmpty() || listSymbol.last() != "*") {
+                                    writer.write("<i>")
+                                    listSymbol.add("*")
+                                } else {
+                                    writer.write("</i>")
+                                    listSymbol.remove(listSymbol.last())
+                                }
+                                index++
                             }
-                            index++
                         }
                     }
-                }
-                '~' -> {
-                    if (listSymbol.isEmpty() || listSymbol.last() != "~~") {
-                        writer.write("<s>")
-                        listSymbol.add("~~")
-                    } else {
-                        writer.write("</s>")
-                        listSymbol.remove(listSymbol.last())
+                    '~' -> {
+                        if (listSymbol.isEmpty() || listSymbol.last() != "~~") {
+                            writer.write("<s>")
+                            listSymbol.add("~~")
+                        } else {
+                            writer.write("</s>")
+                            listSymbol.remove(listSymbol.last())
+                        }
+                        index += 2
                     }
-                    index += 2
-                }
-                else -> {
-                    writer.write(line[index].toString())
-                    index++
+                    else -> {
+                        writer.write(line[index].toString())
+                        index++
+                    }
                 }
             }
         }
+    } catch (e: Exception) {
+        writer.write("</p>\n</body>\n</html>")
+        writer.close()
     }
     writer.write("</p>\n</body>\n</html>")
     writer.close()
