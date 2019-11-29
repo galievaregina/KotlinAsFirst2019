@@ -382,14 +382,13 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 }
             }
         }
+        writer.write("</p>\n</body>\n</html>")
+        writer.close()
     } catch (e: Exception) {
         writer.write("</p>\n</body>\n</html>")
         writer.close()
     }
-    writer.write("</p>\n</body>\n</html>")
-    writer.close()
 }
-
 
 /**
  * Сложная
