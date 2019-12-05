@@ -164,10 +164,10 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = (a.toSet().in
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val a = mapA.toMutableMap()
     for ((name, number) in mapB) {
-        if (mapA[name] == null) a[name] = number
-        else if (mapA[name] != mapB[name]) a[name] = mapA[name] + ", " + mapB[name]
+        if (a[name] == null) a[name] = number
+        else if (a[name] != mapB[name]) a[name] = mapA[name] + ", " + mapB[name]
     }
-    return mapB + a
+    return a
 }
 
 /**
@@ -227,8 +227,8 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     if (chars.isEmpty()) return word.isEmpty()
-    val changeWord = word.toLowerCase().toSet()
-    val mutableChars = chars.toMutableSet()
+    val changeWord = word.toLowerCase()
+    val mutableChars = mutableSetOf<Char>()
     for (element in chars) {
         mutableChars += element.toLowerCase()
     }
@@ -268,9 +268,8 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    val new = words.toSet()
     val res = mutableSetOf<Set<Char>>()
-    for (element in new) {
+    for (element in words) {
         val a = element.toSet()
         if (res.isEmpty() && a.isEmpty()) return true
         if (res.contains(a)) return true

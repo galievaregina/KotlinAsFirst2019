@@ -338,11 +338,11 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     for ((i, line) in file.withIndex()) {
         if (line.isEmpty() && i != 0 && file[i - 1].isNotEmpty()) writer.write("</p>\n<p>\n")
         var index = 0
-        while (index < line.length ) {
+        while (index < line.length) {
             when (line[index]) {
                 '*' -> {
                     when {
-                        line[index + 1] == '*' && index + 1 < line.length - 1 -> {
+                        index + 1 < line.length && line[index + 1] == '*' -> {
                             if (listSymbol.isEmpty() || listSymbol.last() != "**") {
                                 writer.write("<b>")
                                 listSymbol.add("**")

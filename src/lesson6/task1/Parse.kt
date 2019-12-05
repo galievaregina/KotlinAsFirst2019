@@ -144,16 +144,12 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
+    if (!jumps.matches(Regex("""[\d\s\-\%]+"""))) return -1
     val parts = jumps.split(" ")
-    var max = 0
-    try {
-        for (element in parts) {
-            if (element != "-" && element != "%" && element.toInt() > max) max = element.toInt()
-        }
-    } catch (e: NumberFormatException) {
-        return -1
+    var max = -1
+    for (element in parts) {
+        if (element != "-" && element != "%" && element.toInt() > max) max = element.toInt()
     }
-    if (max == 0) return -1
     return max
 }
 
@@ -169,17 +165,13 @@ fun bestLongJump(jumps: String): Int {
  * вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
+    if (!jumps.matches(Regex("""[\d\s+\-\%]+""")) && !jumps.contains(Regex("""[+]+"""))) return -1
     val parts = jumps.split(" ")
-    var max = 0
-    try {
-        for (i in 0..parts.size - 2) {
-            if (parts[i + 1] == "+" && parts[i] != "-" && parts[i] != "%" && parts[i].toInt() > max)
-                max = parts[i].toInt()
-        }
-    } catch (e: NumberFormatException) {
-        return -1
+    var max = -1
+    for (i in 0..parts.size - 2 step 2) {
+        if (parts[i + 1] == "+" && parts[i].toInt() > max)
+            max = parts[i].toInt()
     }
-    if (max == 0) return -1
     return max
 }
 
@@ -197,17 +189,19 @@ fun plusMinus(expression: String): Int {
     require(expression.isNotEmpty())
     val parts = expression.split(" ")
     var res = 0
-    require(!(expression.first() == '+' || expression.first() == '-'))
     require(expression.matches(Regex("""[\d\s+\-]+""")))
-    for (element in parts) {
-        require(!(element != "+" && element != "-" && element.toInt() < 0))
-    }
     try {
+        for (i in parts.indices) {
+            if (i % 2 == 0) {
+                if (parts[i].toInt() < 0) throw IllegalArgumentException()
+            } else if (!parts[i].matches(Regex("""[+\-]+"""))) throw IllegalArgumentException()
+        }
         res = parts[0].toInt()
         for (i in 1..parts.size - 2 step 2) {
+            val a = parts[i + 1].toInt()
             when (parts[i]) {
-                "+" -> res += parts[i + 1].toInt()
-                "-" -> res -= parts[i + 1].toInt()
+                "+" -> res += a
+                "-" -> res -= a
                 else -> throw  IllegalArgumentException()
             }
         }
