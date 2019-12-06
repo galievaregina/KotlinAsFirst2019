@@ -96,11 +96,13 @@ fun centerFile(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     var maxStrLength = 0
     for (line in File(inputName).readLines()) {
-        if (line.trim().length >= maxStrLength) maxStrLength = line.trim().length
+        val a = line.trim().length
+        if (a >= maxStrLength) maxStrLength = a
     }
     for (line in File(inputName).readLines()) {
-        if (line.trim().length < maxStrLength) {
-            writer.write(" ".repeat((maxStrLength - line.trim().length) / 2))
+        val a = line.trim().length
+        if (a < maxStrLength) {
+            writer.write(" ".repeat((maxStrLength - a) / 2))
         }
         writer.write(line.trim())
         writer.newLine()
@@ -148,7 +150,8 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             if (element.isNotEmpty()) string.append(" ")
         }
         newLine.add(string.toString().trim())
-        if (string.toString().trim().length >= max) max = string.toString().trim().length
+        val a = string.toString().trim().length
+        if (a >= max) max = a
     }
     for (element in newLine) {
         string.clear()
@@ -336,7 +339,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val listSymbol = mutableListOf<String>()
     val file = File(inputName).readLines()
     for ((i, line) in file.withIndex()) {
-        if (line.isEmpty() && i != 0 && file[i - 1].isNotEmpty()) writer.write("</p>\n<p>\n")
+        if (line.isEmpty() && ((i != 0 && file[i - 1].isNotEmpty()) || i != file.size - 1))
+            writer.write("</p>\n<p>\n")
         var index = 0
         while (index < line.length) {
             when (line[index]) {

@@ -144,7 +144,7 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
-    if (!jumps.matches(Regex("""[\d\s\-\%]+"""))) return -1
+    if (!jumps.matches(Regex("""[\d\s\-\%]+""")) || !jumps.contains(Regex("""[\d]+"""))) return -1
     val parts = jumps.split(" ")
     var max = -1
     for (element in parts) {
@@ -188,12 +188,13 @@ fun bestHighJump(jumps: String): Int {
 fun plusMinus(expression: String): Int {
     require(expression.isNotEmpty())
     val parts = expression.split(" ")
-    var res = 0
+    var res: Int
     require(expression.matches(Regex("""[\d\s+\-]+""")))
     try {
         for (i in parts.indices) {
             if (i % 2 == 0) {
-                if (parts[i].toInt() < 0) throw IllegalArgumentException()
+                if (parts[i].toInt() < 0 || parts[i].contains(Regex("""[+]+""")))
+                    throw IllegalArgumentException()
             } else if (!parts[i].matches(Regex("""[+\-]+"""))) throw IllegalArgumentException()
         }
         res = parts[0].toInt()
@@ -222,8 +223,18 @@ fun plusMinus(expression: String): Int {
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int {
-    val commonWords = Regex(""" ([\S]+)\s\1""").find(" $str".toLowerCase()) ?: return -1
-    return commonWords.range.first
+    val parts = str.split(" ")
+    if (parts.size <= 1) return -1
+    val newParts = mutableListOf<String>()
+    var index = 0
+    for (element in parts) {
+        newParts.add(element.toLowerCase())
+    }
+    for (i in newParts.indices) {
+        if (newParts[i] == newParts[i + 1]) return index
+        else index += newParts[i].length + 1
+    }
+    return -1
 }
 
 
