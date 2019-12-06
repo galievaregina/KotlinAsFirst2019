@@ -284,7 +284,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
             }
         }
     }
-    writer.write(res.toString().removeSurrounding("[", "]"))
+    writer.write(res.joinToString(separator = ", "))
     writer.close()
 }
 
