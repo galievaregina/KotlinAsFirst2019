@@ -232,7 +232,7 @@ fun firstDuplicateIndex(str: String): Int {
     for (element in parts) {
         newParts.add(element.toLowerCase())
     }
-    for (i in newParts.indices) {
+    for (i in 0..newParts.size - 2) {
         if (newParts[i] == newParts[i + 1]) return index
         else index += newParts[i].length + 1
     }
