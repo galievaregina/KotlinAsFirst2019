@@ -93,21 +93,21 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    val writer = File(outputName).bufferedWriter()
-    var maxStrLength = 0
-    for (line in File(inputName).readLines()) {
-        val a = line.trim().length
-        if (a >= maxStrLength) maxStrLength = a
-    }
-    for (line in File(inputName).readLines()) {
-        val a = line.trim().length
-        if (a < maxStrLength) {
-            writer.write(" ".repeat((maxStrLength - a) / 2))
+    File(outputName).bufferedWriter().use {
+        var maxStrLength = 0
+        for (line in File(inputName).readLines()) {
+            val a = line.trim().length
+            if (a >= maxStrLength) maxStrLength = a
         }
-        writer.write(line.trim())
-        writer.newLine()
+        for (line in File(inputName).readLines()) {
+            val a = line.trim().length
+            if (a < maxStrLength) {
+                it.write(" ".repeat((maxStrLength - a) / 2))
+            }
+            it.write(line.trim())
+            it.newLine()
+        }
     }
-    writer.close()
 }
 
 /**
