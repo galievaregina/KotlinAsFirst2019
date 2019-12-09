@@ -339,7 +339,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val listSymbol = mutableListOf<String>()
     val file = File(inputName).readLines()
     for ((i, line) in file.withIndex()) {
-        if (line.isEmpty() && i != 0 && i != file.size - 1 && file[i + 1].isNotEmpty() )
+        if (line.isEmpty() && (i != 0 && file[i - 1].isNotEmpty())
+            || (i != file.size - 1 && file[i + 1].isNotEmpty()))
             writer.write("</p>\n<p>\n")
         var index = 0
         while (index < line.length) {
