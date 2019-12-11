@@ -351,7 +351,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     treasures.toList().sortedBy { it.second.second }.forEach {
         if (mutablecapacity >= it.second.first) {
             res.add(it.first)
-            mutablecapacity.minus(it.second.first)
+            mutablecapacity -= it.second.first
         }
     }
 return res
