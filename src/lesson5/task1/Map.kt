@@ -326,14 +326,16 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     if (list.isEmpty()) return Pair(-1, -1)
     val b = list.toMutableList()
     for (i in list.indices) {
-        val a = number - list[i]
-        b.remove(list[i])
-        for (j in b.indices) {
-            if (b[j] == a) return Pair(i, j + 1)
+        if (list[i] <= number) {
+            val a = number - list[i]
+            b.remove(list[i])
+            for (j in b.indices) {
+                if (b[j] == a) return Pair(i, j + 1)
+            }
+            b.add(list[i])
         }
-        b.add(list[i])
     }
-return Pair(-1, -1)
+    return Pair(-1, -1)
 }
 
 /**
