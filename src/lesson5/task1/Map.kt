@@ -2,7 +2,6 @@
 
 package lesson5.task1
 
-import kotlin.math.max
 
 /**
  * Пример
@@ -305,6 +304,7 @@ fun hasAnagrams(words: List<String>): Boolean {
  */
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
 
+
 /**
  * Сложная
  *
@@ -322,7 +322,19 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    if (list.isEmpty()) return Pair(-1, -1)
+    val b = list.toMutableList()
+    for (i in list.indices) {
+        val a = number - list[i]
+        b.remove(list[i])
+        for (j in b.indices) {
+            if (b[j] == a) return Pair(i, j + 1)
+        }
+        b.add(list[i])
+    }
+return Pair(-1, -1)
+}
 
 /**
  * Очень сложная
@@ -346,16 +358,5 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    val res = mutableSetOf<String>()
-    var mutablecapacity = capacity
-    treasures.toList().sortedWith(Comparator { a, b ->
-        if (a!!.second.second == b!!.second.second)
-            a.second.first - b.second.first
-        else b.second.second - a.second.second }).forEach {
-        if (mutablecapacity >= it.second.first) {
-            res.add(it.first)
-            mutablecapacity -= it.second.first
-        }
-    }
-    return res
+    TODO()
 }
