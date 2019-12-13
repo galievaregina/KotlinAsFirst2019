@@ -306,7 +306,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
     val mutable = friends.toMutableMap()
     val setNames = mutable.keys.toSet()
     var i = 2
-    while (i != 0) {
+    do {
         for ((name, peoples) in friends) {
             if (peoples.isNotEmpty()) {
                 for (element in peoples) {
@@ -317,7 +317,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
             }
         }
         i--
-    }
+    }while (i != 0)
     return mutable
 }
 
