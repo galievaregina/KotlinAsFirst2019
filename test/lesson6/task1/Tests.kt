@@ -34,6 +34,7 @@ class Tests {
     @Test
     @Tag("Normal")
     fun dateStrToDigit() {
+        assertEquals("15.07.1", dateStrToDigit("15 июля 1"))
         assertEquals("15.07.2016", dateStrToDigit("15 июля 2016"))
         assertEquals("", dateStrToDigit("3 мартобря 1918"))
         assertEquals("18.11.2018", dateStrToDigit("18 ноября 2018"))
@@ -71,7 +72,7 @@ class Tests {
     @Test
     @Tag("Normal")
     fun bestLongJump() {
-        assertEquals(717, bestLongJump("706 % - 717 - 703"))
+        assertEquals(-1, bestLongJump("- -"))
         assertEquals(-1, bestLongJump("% - - % -"))
         assertEquals(754, bestLongJump("700 717 707 % 754"))
         assertEquals(-1, bestLongJump("700 + 700"))
@@ -89,6 +90,8 @@ class Tests {
     @Test
     @Tag("Hard")
     fun plusMinus() {
+        assertThrows(IllegalArgumentException::class.java) { plusMinus(" ") }
+        assertThrows(IllegalArgumentException::class.java) { plusMinus("a") }
         assertEquals(0, plusMinus("0"))
         assertEquals(4, plusMinus("2 + 2"))
         assertEquals(6, plusMinus("2 + 31 - 40 + 13"))
@@ -103,6 +106,7 @@ class Tests {
     @Test
     @Tag("Hard")
     fun firstDuplicateIndex() {
+        assertEquals(-1, firstDuplicateIndex("a p"))
         assertEquals(-1, firstDuplicateIndex("Привет"))
         assertEquals(9, firstDuplicateIndex("Он пошёл в в школу"))
         assertEquals(40, firstDuplicateIndex("Яблоко упало на ветку с ветки оно упало на на землю"))
@@ -131,6 +135,8 @@ class Tests {
     @Test
     @Tag("Impossible")
     fun computeDeviceCells() {
+        assertEquals(listOf(0), computeDeviceCells(1, "[[]]", 10000))
+        assertThrows(IllegalStateException::class.java) { computeDeviceCells(1, "<", 500) }
         assertEquals(listOf(0, 0, 0, 0, 0, 1, 1, 1, 1, 1), computeDeviceCells(10, "+>+>+>+>+", 10000))
         assertEquals(listOf(-1, -1, -1, -1, -1, 0, 0, 0, 0, 0), computeDeviceCells(10, "<-<-<-<-<-", 10000))
         assertEquals(listOf(1, 1, 1, 1, 1, 0, 0, 0, 0, 0), computeDeviceCells(10, "- <<<<< +[>+]", 10000))

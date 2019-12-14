@@ -259,6 +259,7 @@ class Tests {
     @Test
     @Tag("Normal")
     fun hasAnagrams() {
+        assertTrue(hasAnagrams(listOf("a", "a")))
         assertFalse(hasAnagrams(emptyList()))
         assertTrue(hasAnagrams(listOf("рот", "свет", "тор")))
         assertFalse(hasAnagrams(listOf("рот", "свет", "код", "дверь")))
@@ -269,14 +270,17 @@ class Tests {
     fun propagateHandshakes() {
         assertEquals(
             mapOf(
-                "Marat" to setOf("Mikhail", "Sveta"),
-                "Sveta" to setOf("Mikhail"),
-                "Mikhail" to setOf()
+                "2" to setOf("0"),
+                "0" to setOf(),
+                "1" to setOf("3","2","0"),
+                "3"  to setOf("2", "0")
             ),
             propagateHandshakes(
                 mapOf(
-                    "Marat" to setOf("Sveta"),
-                    "Sveta" to setOf("Mikhail")
+                    "2" to setOf("0"),
+                    "0" to setOf(),
+                    "1" to setOf("3"),
+                    "3" to setOf("2")
                 )
             )
         )
@@ -304,8 +308,8 @@ class Tests {
             findSumOfTwo(emptyList(), 1)
         )
         assertEquals(
-            Pair(0, 2),
-            findSumOfTwo(listOf(1, 2, 3), 4)
+            Pair(8, 17),
+            findSumOfTwo(listOf(0,0,0,0,3,0,0,0,17,0,0,0,0,0,0,0,0,8,0,0), 25)
         )
         assertEquals(
             Pair(-1, -1),
@@ -316,6 +320,20 @@ class Tests {
     @Test
     @Tag("Impossible")
     fun bagPacking() {
+        assertEquals(
+            setOf("Кубок"),
+            bagPacking(
+                mapOf("Кубок" to (1 to 1), "Слиток" to (2 to 1)),
+                2
+            )
+        )
+        assertEquals(
+            setOf("0"),
+            bagPacking(
+                mapOf("0" to (1 to 1)),
+                1
+            )
+        )
         assertEquals(
             setOf("Кубок"),
             bagPacking(
