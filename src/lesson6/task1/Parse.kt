@@ -319,8 +319,6 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var number = cells / 2
     for (i in 0 until cells) result.add(0)
     if (commands.isEmpty()) return result
-    if ((cells == 1 && (commands.toSet().contains('<') || commands.toSet().contains('>'))))
-        throw IllegalStateException()
     brackets = 0
     while (count != limit && index != commands.length) {
         check(!(number == -1 || number == result.size))
@@ -353,6 +351,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
         }
         count++
         index++
+        if (number < 0 || number > cells) throw IllegalStateException()
     }
     return result
 }
