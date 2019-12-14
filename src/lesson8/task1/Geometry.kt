@@ -184,7 +184,7 @@ fun lineByPoints(a: Point, b: Point): Line = TODO()
  * Построить серединный перпендикуляр по отрезку или по двум точкам
  */
 fun bisectorByPoints(a: Point, b: Point): Line {
-    var middle = Point((a.x + b.x) / 2, (a.y + b.y) / 2)
+    val middle = Point((a.x + b.x) / 2, (a.y + b.y) / 2)
     val angel = (PI / 2 + (acos(abs((a.x - b.x) / a.distance(b))) + PI) % PI) % PI
     return Line(middle, angel)
 }
