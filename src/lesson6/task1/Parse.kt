@@ -77,7 +77,7 @@ fun dateStrToDigit(str: String): String {
         val day = parts[0].toInt()
         val year = parts[2].toInt()
         if (year < 0) return ""
-        val month = listOfMonth().indexOf(parts[1]) + 1
+        val month = monthName.indexOf(parts[1]) + 1
         if (day !in 1..daysInMonth(month, year) || month !in 1..12) return ""
         return String.format("%02d.%02d.%d", day, month, year)
     } catch (e: NumberFormatException) {
@@ -85,13 +85,12 @@ fun dateStrToDigit(str: String): String {
     }
 }
 
-fun listOfMonth(): List<String> {
+
     val monthName = listOf(
         "января", "февраля", "марта", "апреля", "мая", "июня",
         "июля", "августа", "сентября", "октября", "ноября", "декабря"
     )
-    return monthName
-}
+
 
 /**
  * Средняя
@@ -110,7 +109,7 @@ fun dateDigitToStr(digital: String): String {
         val day = parts[0].toInt()
         val year = parts[2].toInt()
         if (day !in 1..daysInMonth(parts[1].toInt(), year)) return ""
-        val month = listOfMonth()[parts[1].toInt() - 1]
+        val month = monthName[parts[1].toInt() - 1]
         return String.format("$day $month $year")
     } catch (e: Exception) {
         return ""
@@ -169,7 +168,7 @@ fun bestHighJump(jumps: String): Int {
     val parts = jumps.split(" ")
     var max = -1
     for (i in 0..parts.size - 2 step 2) {
-        if (parts[i + 1] == "+" && parts[i].toInt() > max)
+        if (parts[i + 1].toSet().contains('+') && parts[i].toInt() > max)
             max = parts[i].toInt()
     }
     return max

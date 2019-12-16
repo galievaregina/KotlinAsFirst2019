@@ -76,20 +76,16 @@ data class Circle(val center: Point, val radius: Double) {
      * расстояние между их центрами минус сумма их радиусов.
      * Расстояние между пересекающимися окружностями считать равным 0.0.
      */
-    fun distance(other: Circle): Double {
-        if (center.distance(other.center) <= radius + other.radius) return 0.0
-        return center.distance(other.center) - (radius + other.radius)
-    }
+    fun distance(other: Circle): Double = max(center.distance(other.center) - radius - other.radius, 0.0)
+
 
     /**
      * Тривиальная
      *
      * Вернуть true, если и только если окружность содержит данную точку НА себе или ВНУТРИ себя
      */
-    fun contains(p: Point): Boolean {
-        if (sqr(center.x - p.x) + sqr(center.y - p.y) <= sqr(radius)) return true
-        return false
-    }
+    fun contains(p: Point): Boolean = sqr(center.x - p.x) + sqr(center.y - p.y) <= sqr(radius)
+
 }
 
 /**
@@ -169,7 +165,10 @@ class Line private constructor(val b: Double, val angle: Double) {
  *
  * Построить прямую по отрезку
  */
-fun lineBySegment(s: Segment): Line = TODO()
+fun lineBySegment(s: Segment): Line {
+    val angel = atan2(s.end.y - s.begin.y, s.end.x - s.begin.x)
+    return Line(s.end, angel)
+}
 
 /**
  * Средняя
@@ -177,7 +176,7 @@ fun lineBySegment(s: Segment): Line = TODO()
  * Построить прямую по двум точкам
  */
 fun lineByPoints(a: Point, b: Point): Line {
-    val angel = (atan((a.y - b.y) / (a.x - b.x)) + PI) % PI
+    val angel = atan2(a.y - b.y, a.x - b.x) + PI
     return Line(a, angel)
 }
 
@@ -187,10 +186,9 @@ fun lineByPoints(a: Point, b: Point): Line {
  * Построить серединный перпендикуляр по отрезку или по двум точкам
  */
 fun bisectorByPoints(a: Point, b: Point): Line {
-    val al = (lineByPoints(a, b).angle + PI / 2) % PI
+    val al = ((atan2(a.y - b.y, a.x - b.x) + PI) + PI / 2) % PI
     val middle = Point((a.x + b.x) / 2, (a.y + b.y) / 2)
     return Line(middle, al)
-
 }
 
 /**

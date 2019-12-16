@@ -94,15 +94,15 @@ fun sibilants(inputName: String, outputName: String) {
  */
 fun centerFile(inputName: String, outputName: String) {
     File(outputName).bufferedWriter().use {
+        val newFile = File(inputName).readLines().toMutableList()
         var maxStrLength = 0
-        for (line in File(inputName).readLines()) {
-            val a = line.trim().length
-            if (a >= maxStrLength) maxStrLength = a
+        for (i in newFile.indices) {
+            newFile[i] = newFile[i].trim()
+            if (newFile[i].length >= maxStrLength) maxStrLength = newFile[i].length
         }
-        for (line in File(inputName).readLines()) {
-            val a = line.trim().length
-            if (a < maxStrLength) {
-                it.write(" ".repeat((maxStrLength - a) / 2))
+        for (line in newFile) {
+            if (line.length < maxStrLength) {
+                it.write(" ".repeat((maxStrLength - line.length) / 2))
             }
             it.write(line.trim())
             it.newLine()
@@ -149,9 +149,9 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             string.append(element)
             if (element.isNotEmpty()) string.append(" ")
         }
-        newLine.add(string.toString().trim())
-        val a = string.toString().trim().length
-        if (a >= max) max = a
+        val a = string.toString().trim()
+        newLine.add(a)
+        if (a.length >= max) max = a.length
     }
     for (element in newLine) {
         string.clear()
